@@ -92,22 +92,22 @@ public class LinkedinprofileModule extends KrollModule {
 			if (o instanceof KrollFunction) {
 				this.onsuccess = (KrollFunction) o;
 			} else {
-				Log.e(LCAT, "parameter 'onsuccess' must be a function");
+				Log.w(LCAT, "parameter 'onsuccess' must be a function");
 			}
 
 		} else {
-			Log.e(LCAT, "paramter 'onsuccess' is mandatory");
+			Log.w(LCAT, "paramter 'onsuccess' is mandatory");
 		}
 		if (options.containsKeyAndNotNull("onerror")) {
 			Object o = options.get("onerror");
 			if (o instanceof KrollFunction) {
 				this.onsuccess = (KrollFunction) o;
 			} else {
-				Log.e(LCAT, "parameter 'onerror' must be a function");
+				Log.w(LCAT, "parameter 'onerror' must be a function");
 			}
 
 		} else {
-			Log.e(LCAT, "paramter 'onerror' is mandatory");
+			Log.w(LCAT, "paramter 'onerror' is mandatory");
 		}
 		// all is imported
 		deepLinkHelper.openOtherProfile(activity, targetID,
@@ -122,22 +122,22 @@ public class LinkedinprofileModule extends KrollModule {
 			if (o instanceof KrollFunction) {
 				this.onsuccess = (KrollFunction) o;
 			} else {
-				Log.e(LCAT, "parameter 'onsuccess' must be a function");
+				Log.w(LCAT, "parameter 'onsuccess' must be a function");
 			}
 
 		} else {
-			Log.e(LCAT, "paramter 'onsuccess' is mandatory");
+			Log.w(LCAT, "paramter 'onsuccess' is mandatory");
 		}
 		if (options.containsKeyAndNotNull("onerror")) {
 			Object o = options.get("onerror");
 			if (o instanceof KrollFunction) {
 				this.onsuccess = (KrollFunction) o;
 			} else {
-				Log.e(LCAT, "parameter 'onerror' must be a function");
+				Log.w(LCAT, "parameter 'onerror' must be a function");
 			}
 
 		} else {
-			Log.e(LCAT, "paramter 'onerror' is mandatory");
+			Log.w(LCAT, "paramter 'onerror' is mandatory");
 		}
 		deepLinkHelper
 				.openCurrentProfile(activity, new LinkedInResultHandler());
