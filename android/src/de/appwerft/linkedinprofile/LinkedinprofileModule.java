@@ -12,19 +12,19 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.common.TiConfig;
+import org.appcelerator.titanium.TiApplication;
 
-import com.linkedin.platform.*;
-import com.linkedin.platform.listeners.DeepLinkListener;
+import android.app.Activity;
+
+import com.linkedin.platform.DeepLinkHelper;
 import com.linkedin.platform.errors.LIDeepLinkError;
+import com.linkedin.platform.listeners.DeepLinkListener;
 
 ;
 
 @Kroll.module(name = "Linkedinprofile", id = "de.appwerft.linkedinprofile")
 public class LinkedinprofileModule extends KrollModule {
-
 	private final class LinkedInResultHandler implements DeepLinkListener {
 		@Override
 		public void onDeepLinkSuccess() {
@@ -63,9 +63,13 @@ public class LinkedinprofileModule extends KrollModule {
 	KrollFunction onsuccess;
 	KrollFunction onerror;
 	private String targetID = "";
+	private DeepLinkHelper deepLinkHelper;
+	private Activity activity;
 
 	public LinkedinprofileModule() {
 		super();
+		deepLinkHelper = DeepLinkHelper.getInstance();
+		activity = TiApplication.getAppRootOrCurrentActivity();
 	}
 
 	@Kroll.onAppCreate
@@ -76,7 +80,7 @@ public class LinkedinprofileModule extends KrollModule {
 	}
 
 	@Kroll.method
-	public void openProfile(KrollDict options) {
+	public void openOtherProfile(KrollDict options) {
 		if (options.containsKeyAndNotNull("id")) {
 			targetID = options.getString("id");
 		} else {
@@ -106,11 +110,37 @@ public class LinkedinprofileModule extends KrollModule {
 			Log.e(LCAT, "paramter 'onerror' is mandatory");
 		}
 		// all is imported
-		DeepLinkHelper deepLinkHelper = DeepLinkHelper.getInstance();
-		deepLinkHelper.openOtherProfile(
-				TiApplication.getAppRootOrCurrentActivity(), targetID,
+		deepLinkHelper.openOtherProfile(activity, targetID,
 				new LinkedInResultHandler());
+	}
 
+	@Kroll.method
+	public void openCurrentProfile(KrollDict options) {
+
+		if (options.containsKeyAndNotNull("onsuccess")) {
+			Object o = options.get("onsuccess");
+			if (o instanceof KrollFunction) {
+				this.onsuccess = (KrollFunction) o;
+			} else {
+				Log.e(LCAT, "parameter 'onsuccess' must be a function");
+			}
+
+		} else {
+			Log.e(LCAT, "paramter 'onsuccess' is mandatory");
+		}
+		if (options.containsKeyAndNotNull("onerror")) {
+			Object o = options.get("onerror");
+			if (o instanceof KrollFunction) {
+				this.onsuccess = (KrollFunction) o;
+			} else {
+				Log.e(LCAT, "parameter 'onerror' must be a function");
+			}
+
+		} else {
+			Log.e(LCAT, "paramter 'onerror' is mandatory");
+		}
+		deepLinkHelper
+				.openCurrentProfile(activity, new LinkedInResultHandler());
 	}
 
 }
