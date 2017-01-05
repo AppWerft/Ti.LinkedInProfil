@@ -9,13 +9,29 @@ import android.os.Build;
 
 public class AppStore {
 
-	public static void goAppStore(final Activity activity, boolean showDialog) {
+	public static void goAppStore(final Activity activity, boolean showDialog,
+			String[] goappstoreTexts) {
 		if (!showDialog) {
 			goToAppStore(activity);
 			return;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
+		builder.setMessage(goappstoreTexts[0]).setTitle(goappstoreTexts[1]);
+		builder.setPositiveButton(goappstoreTexts[2],
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						goToAppStore(activity);
+						dialogInterface.dismiss();
+					}
+				});
+		builder.setNegativeButton(goappstoreTexts[3],
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.dismiss();
+					}
+				});
 		builder.create().show();
 	}
 

@@ -79,14 +79,7 @@ public class LinkedinprofileModule extends KrollModule {
 		// created
 	}
 
-	@Kroll.method
-	public void openOtherProfile(KrollDict options) {
-		if (options.containsKeyAndNotNull("id")) {
-			targetID = options.getString("id");
-		} else {
-			Log.e(LCAT,
-					"the module needs a paramter id, this is the profile id of user.");
-		}
+	private void getOptions(KrollDict options) {
 		if (options.containsKeyAndNotNull("onsuccess")) {
 			Object o = options.get("onsuccess");
 			if (o instanceof KrollFunction) {
@@ -109,38 +102,39 @@ public class LinkedinprofileModule extends KrollModule {
 		} else {
 			Log.w(LCAT, "paramter 'onerror' is mandatory");
 		}
-		// all is imported
+
+	}
+
+	@Kroll.method
+	public void setTexts(KrollDict kd) {
+		final String[] goappstoreTexts = new String[4];
+		if (kd.containsKeyAndNotNull("message")) {
+			goappstoreTexts[0] = kd.getString("message");
+		}
+		if (kd.containsKeyAndNotNull("message")) {
+			goappstoreTexts[1] = kd.getString("message");
+		}
+		if (kd.containsKeyAndNotNull("title")) {
+			goappstoreTexts[2] = kd.getString("title");
+		}
+		if (kd.containsKeyAndNotNull("download")) {
+			goappstoreTexts[3] = kd.getString("download");
+		}
+		deepLinkHelper.setTexts(goappstoreTexts);
+	}
+
+	@Kroll.method
+	public void openOtherProfile(KrollDict options) {
+		getOptions(options);
 		deepLinkHelper.openOtherProfile(activity, targetID,
 				new LinkedInResultHandler());
 	}
 
 	@Kroll.method
 	public void openCurrentProfile(KrollDict options) {
+		getOptions(options);
 
-		if (options.containsKeyAndNotNull("onsuccess")) {
-			Object o = options.get("onsuccess");
-			if (o instanceof KrollFunction) {
-				this.onsuccess = (KrollFunction) o;
-			} else {
-				Log.w(LCAT, "parameter 'onsuccess' must be a function");
-			}
-
-		} else {
-			Log.w(LCAT, "paramter 'onsuccess' is mandatory");
-		}
-		if (options.containsKeyAndNotNull("onerror")) {
-			Object o = options.get("onerror");
-			if (o instanceof KrollFunction) {
-				this.onsuccess = (KrollFunction) o;
-			} else {
-				Log.w(LCAT, "parameter 'onerror' must be a function");
-			}
-
-		} else {
-			Log.w(LCAT, "paramter 'onerror' is mandatory");
-		}
 		deepLinkHelper
 				.openCurrentProfile(activity, new LinkedInResultHandler());
 	}
-
 }
