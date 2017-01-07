@@ -50,9 +50,6 @@ public class LinkedinprofileModule extends KrollModule {
 			if (hasListeners("onerror")) {
 				fireEvent("onerror", kd);
 			}
-
-			// TODO Auto-generated method stub
-
 		}
 	}
 
@@ -65,6 +62,7 @@ public class LinkedinprofileModule extends KrollModule {
 	private String targetID = "";
 	private DeepLinkHelper deepLinkHelper;
 	private Activity activity;
+	String[] alerttexts;
 
 	public LinkedinprofileModule() {
 		super();
@@ -74,9 +72,7 @@ public class LinkedinprofileModule extends KrollModule {
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-		Log.d(LCAT, "inside onAppCreate");
-		// put module init code that needs to run when the application is
-		// created
+
 	}
 
 	private void getOptions(KrollDict options) {
@@ -99,28 +95,13 @@ public class LinkedinprofileModule extends KrollModule {
 				Log.w(LCAT, "parameter 'onerror' must be a function");
 			}
 
-		} else {
-			Log.w(LCAT, "paramter 'onerror' is mandatory");
 		}
+		if (options.containsKeyAndNotNull("alert")) {
+			String[] alert = options.getStringArray("alert");
 
-	}
+		}
+		deepLinkHelper.setTexts(alerttexts);
 
-	@Kroll.method
-	public void setTexts(KrollDict kd) {
-		final String[] goappstoreTexts = new String[4];
-		if (kd.containsKeyAndNotNull("message")) {
-			goappstoreTexts[0] = kd.getString("message");
-		}
-		if (kd.containsKeyAndNotNull("message")) {
-			goappstoreTexts[1] = kd.getString("message");
-		}
-		if (kd.containsKeyAndNotNull("title")) {
-			goappstoreTexts[2] = kd.getString("title");
-		}
-		if (kd.containsKeyAndNotNull("download")) {
-			goappstoreTexts[3] = kd.getString("download");
-		}
-		deepLinkHelper.setTexts(goappstoreTexts);
 	}
 
 	@Kroll.method

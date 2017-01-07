@@ -10,22 +10,24 @@ var LI = require("de.appwerft.linkedinprofile");
 
 LI.setTexts({  // for alert dialog if not installed
 	message:"Install LinkedIn",
-	app_title:"Install LinkedIn",
-	app_download:"",
-	app_cancel:""
+	title:"Install LinkedIn",
+	download:"",
+	cancel:""
 });
   
 LI.addEventListener("onsuccess",function(){});
 LI.addEventListener("onerror",function(){});
 
 LI.openOtherProfile({
-
+	alert : ["LI not installed","LinkedInis not installed. Please go to playstore","Download","Cancel"], // texts for alert dialog
 	id : "adamtarmstrong",
 	onsuccess : function() {},
 	onerror : function(e) {
 		console.log(e.error);
 	},
 });
-LI.openCurrentProfile();
+LI.openCurrentProfile({
+	alert : ["LI not installed","LinkedInis not installed. Please go to playstore","Download","Cancel"], // texts for alert dialog
+});
 ```
 For result you can use callbacks or events.
