@@ -20,6 +20,7 @@ import com.linkedin.platform.listeners.AuthListener;
 import com.linkedin.platform.utils.Scope;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -259,6 +260,10 @@ public class LISessionManager {
 		private void recover() {
 			SharedPreferences sharedPref = getSharedPref();
 			Log.d(LCAT, "SharedPreferences" + sharedPref.toString());
+			Map<String, ?> allEntries = sharedPref.getAll();
+			for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+				Log.d(LCAT, entry.getKey() + ": " + entry.getValue().toString());
+			}
 			String accessTokenStr = sharedPref.getString(
 					SHARED_PREFERENCES_ACCESS_TOKEN, null);
 			Log.d(LCAT, "accessTokenStr=" + accessTokenStr);
