@@ -1,10 +1,12 @@
 package com.linkedin.platform;
 
+import org.appcelerator.titanium.TiApplication;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.linkedin.platform.errors.LIAppErrorCode;
@@ -25,7 +27,8 @@ public class DeepLinkHelper {
 	private static final String DEEPLINK_ERROR_MESSAGE_EXTRA_NAME = "com.linkedin.thirdparty.deeplink.EXTRA_ERROR_MESSAGE";
 	private static DeepLinkHelper deepLinkHelper;
 	private DeepLinkListener deepLinkListener;
-	public String[] goappstoreTexts;
+	private String[] alertTexts;
+	final String LCAT = "LinkedIn 👥";
 
 	public static DeepLinkHelper getInstance() {
 		if (deepLinkHelper == null) {
@@ -54,18 +57,23 @@ public class DeepLinkHelper {
 	 * @param callback
 	 */
 
-	public void setTexts(String[] goappstoreTexts) {
-		this.goappstoreTexts = goappstoreTexts;
+	public void setTexts(String[] alertTexts) {
+		Log.d(LCAT, "setTexts started with " + alertTexts.toString());
+		this.alertTexts = alertTexts;
 
 	}
 
 	public void openOtherProfile(Activity activity, String memberId,
 			DeepLinkListener callback) {
 		this.deepLinkListener = callback;
-
-		LISession session = LISessionManager.getInstance(
-				activity.getApplicationContext()).getSession();
+		Log.d(LCAT, ">>>>> openOtherProfile started with " + memberId);
+		Context ctx = activity.getApplicationContext();
+		LISession session = LISessionManager.getInstance(ctx).getSession();
+		Log.d(LCAT, session.toString());
 		if (!session.isValid()) {
+			Log.d(LCAT,
+					"openOtherProfile ends with 'no access token' for member "
+							+ memberId);
 			callback.onDeepLinkError(new LIDeepLinkError(
 					LIAppErrorCode.NOT_AUTHENTICATED,
 					"there is no access token"));
@@ -73,7 +81,7 @@ public class DeepLinkHelper {
 		}
 		try {
 			if (!LIAppVersion.isLIAppCurrent(activity)) {
-				AppStore.goAppStore(activity, true, goappstoreTexts);
+				AppStore.goAppStore(activity, true, alertTexts);
 				return;
 			}
 			deepLinkToProfile(activity, memberId, session.getAccessToken());

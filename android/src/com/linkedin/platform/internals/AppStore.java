@@ -6,18 +6,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 public class AppStore {
+	final static String LCAT = "LinkedIn 👥";
 
 	public static void goAppStore(final Activity activity, boolean showDialog,
-			String[] goappstoreTexts) {
+			String[] alertTexts) {
 		if (!showDialog) {
 			goToAppStore(activity);
 			return;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setMessage(goappstoreTexts[0]).setTitle(goappstoreTexts[1]);
-		builder.setPositiveButton(goappstoreTexts[2],
+		Log.d(LCAT, "try to go appstore ");
+		builder.setMessage(alertTexts[0]).setTitle(alertTexts[1]);
+		builder.setPositiveButton(alertTexts[2],
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
@@ -25,7 +28,7 @@ public class AppStore {
 						dialogInterface.dismiss();
 					}
 				});
-		builder.setNegativeButton(goappstoreTexts[3],
+		builder.setNegativeButton(alertTexts[3],
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
@@ -37,6 +40,7 @@ public class AppStore {
 
 	private static void goToAppStore(final Activity activity) {
 		SupportedAppStore appStore = SupportedAppStore.fromDeviceManufacturer();
+		Log.d(LCAT, "try to go appstore " + appStore.toString());
 		String appStoreUri = appStore.getAppStoreUri();
 		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(appStoreUri));
 		try {

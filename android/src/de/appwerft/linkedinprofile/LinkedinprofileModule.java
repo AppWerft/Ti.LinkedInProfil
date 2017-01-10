@@ -44,6 +44,7 @@ public class LinkedinprofileModule extends KrollModule {
 			kd.put("error", error.toString());
 			// callback
 			if (onerror != null) {
+				Log.d(LCAT, "onnerror callback");
 				onerror.call(getKrollObject(), kd);
 			}
 			// eventListeners
@@ -54,15 +55,13 @@ public class LinkedinprofileModule extends KrollModule {
 	}
 
 	// Standard Debugging variables
-	private static final String LCAT = "Linkedinprofile";
-
-	private String id;
+	private static final String LCAT = "LinkedIn 👥";
 	KrollFunction onsuccess;
 	KrollFunction onerror;
-	private String targetID = "";
+	private String memberId = null;
 	private DeepLinkHelper deepLinkHelper;
 	private Activity activity;
-	String[] alerttexts;
+	String[] alert = null;
 
 	public LinkedinprofileModule() {
 		super();
@@ -90,31 +89,37 @@ public class LinkedinprofileModule extends KrollModule {
 		if (options.containsKeyAndNotNull("onerror")) {
 			Object o = options.get("onerror");
 			if (o instanceof KrollFunction) {
-				this.onsuccess = (KrollFunction) o;
+				this.onerror = (KrollFunction) o;
 			} else {
 				Log.w(LCAT, "parameter 'onerror' must be a function");
 			}
 
 		}
 		if (options.containsKeyAndNotNull("alert")) {
-			String[] alert = options.getStringArray("alert");
-
+			this.alert = options.getStringArray("alert");
 		}
-		deepLinkHelper.setTexts(alerttexts);
+		if (options.containsKeyAndNotNull("memberId")) {
+			this.memberId = options.getString("memberId");
+		}
+		if (alert != null)
+			deepLinkHelper.setTexts(alert);
 
 	}
 
 	@Kroll.method
 	public void openOtherProfile(KrollDict options) {
 		getOptions(options);
-		deepLinkHelper.openOtherProfile(activity, targetID,
-				new LinkedInResultHandler());
+		Log.d(LCAT, "try to openOtherProfile() from TiModule");
+		if (memberId == null)
+			Log.e(LCAT, "missing memberId");
+		else
+			deepLinkHelper.openOtherProfile(activity, memberId,
+					new LinkedInResultHandler());
 	}
 
 	@Kroll.method
 	public void openCurrentProfile(KrollDict options) {
 		getOptions(options);
-
 		deepLinkHelper
 				.openCurrentProfile(activity, new LinkedInResultHandler());
 	}

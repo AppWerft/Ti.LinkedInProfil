@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -60,7 +58,7 @@ public class LISessionManager {
 	private LISessionImpl session;
 	private AuthListener authListener;
 
-	public static LISessionManager getInstance(@NonNull Context context) {
+	public static LISessionManager getInstance(Context context) {
 		if (sessionManager == null) {
 			sessionManager = new LISessionManager();
 		}
@@ -118,10 +116,10 @@ public class LISessionManager {
 	 *
 	 */
 	public void init(Activity activity, Scope scope, AuthListener callback,
-			boolean showGoToAppStoreDialog) {
+			boolean showGoToAppStoreDialog, String[] alertTexts) {
 		// check if LI
 		if (!LIAppVersion.isLIAppCurrent(ctx)) {
-			AppStore.goAppStore(activity, showGoToAppStoreDialog);
+			AppStore.goAppStore(activity, showGoToAppStoreDialog, alertTexts);
 			return;
 		}
 		authListener = callback;
@@ -220,7 +218,7 @@ public class LISessionManager {
 			return accessToken;
 		}
 
-		void setAccessToken(@Nullable AccessToken accessToken) {
+		void setAccessToken(AccessToken accessToken) {
 			this.accessToken = accessToken;
 			save();
 		}
