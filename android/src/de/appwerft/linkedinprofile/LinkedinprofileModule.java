@@ -21,18 +21,14 @@ import com.linkedin.platform.DeepLinkHelper;
 import com.linkedin.platform.errors.LIDeepLinkError;
 import com.linkedin.platform.listeners.DeepLinkListener;
 
-;
-
 @Kroll.module(name = "Linkedinprofile", id = "de.appwerft.linkedinprofile")
 public class LinkedinprofileModule extends KrollModule {
 	private final class LinkedInResultHandler implements DeepLinkListener {
 		@Override
 		public void onDeepLinkSuccess() {
-			// callback
 			if (onsuccess != null) {
 				onsuccess.call(getKrollObject(), new KrollDict());
 			}
-			// eventListeners
 			if (hasListeners("onsuccess")) {
 				fireEvent("onsuccess", new KrollDict());
 			}
@@ -42,12 +38,9 @@ public class LinkedinprofileModule extends KrollModule {
 		public void onDeepLinkError(LIDeepLinkError error) {
 			KrollDict kd = new KrollDict();
 			kd.put("error", error.toString());
-			// callback
 			if (onerror != null) {
-				Log.d(LCAT, "onnerror callback");
 				onerror.call(getKrollObject(), kd);
 			}
-			// eventListeners
 			if (hasListeners("onerror")) {
 				fireEvent("onerror", kd);
 			}
@@ -66,12 +59,11 @@ public class LinkedinprofileModule extends KrollModule {
 	public LinkedinprofileModule() {
 		super();
 		deepLinkHelper = DeepLinkHelper.getInstance();
-		activity = TiApplication.getAppRootOrCurrentActivity();
+		activity = TiApplication.getAppCurrentActivity();
 	}
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-
 	}
 
 	private void getOptions(KrollDict options) {
@@ -82,9 +74,6 @@ public class LinkedinprofileModule extends KrollModule {
 			} else {
 				Log.w(LCAT, "parameter 'onsuccess' must be a function");
 			}
-
-		} else {
-			Log.w(LCAT, "paramter 'onsuccess' is mandatory");
 		}
 		if (options.containsKeyAndNotNull("onerror")) {
 			Object o = options.get("onerror");
@@ -93,23 +82,21 @@ public class LinkedinprofileModule extends KrollModule {
 			} else {
 				Log.w(LCAT, "parameter 'onerror' must be a function");
 			}
-
 		}
 		if (options.containsKeyAndNotNull("alert")) {
 			this.alert = options.getStringArray("alert");
 		}
+		if (alert != null)
+			deepLinkHelper.setTexts(alert);
 		if (options.containsKeyAndNotNull("memberId")) {
 			this.memberId = options.getString("memberId");
 		}
-		if (alert != null)
-			deepLinkHelper.setTexts(alert);
-
 	}
 
 	@Kroll.method
 	public void openOtherProfile(KrollDict options) {
 		getOptions(options);
-		Log.d(LCAT, "try to openOtherProfile() from TiModule");
+		Log.d(LCAT, "\n\n>>>>>>> try to openOtherProfile() from TiModule");
 		if (memberId == null)
 			Log.e(LCAT, "missing memberId");
 		else

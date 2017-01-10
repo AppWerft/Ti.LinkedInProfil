@@ -19,15 +19,13 @@ import com.linkedin.platform.listeners.DeepLinkListener;
  * DeepLinkHelper enables linking to pages within the LinkedIn application
  */
 public class DeepLinkHelper {
-
 	public static final int LI_SDK_CROSSLINK_REQUEST_CODE = 13287;
-	private static final String TAG = DeepLinkHelper.class.getName();
 	private static final String CURRENTLY_LOGGED_IN_MEMBER = "you";
 	private static final String DEEPLINK_ERROR_CODE_EXTRA_NAME = "com.linkedin.thirdparty.deeplink.EXTRA_ERROR_CODE";
 	private static final String DEEPLINK_ERROR_MESSAGE_EXTRA_NAME = "com.linkedin.thirdparty.deeplink.EXTRA_ERROR_MESSAGE";
 	private static DeepLinkHelper deepLinkHelper;
 	private DeepLinkListener deepLinkListener;
-	private String[] alertTexts;
+	private static String[] alertTexts;
 	final String LCAT = "LinkedIn 👥";
 
 	public static DeepLinkHelper getInstance() {
@@ -57,19 +55,24 @@ public class DeepLinkHelper {
 	 * @param callback
 	 */
 
-	public void setTexts(String[] alertTexts) {
-		Log.d(LCAT, "setTexts started with " + alertTexts.toString());
-		this.alertTexts = alertTexts;
-
+	public void setTexts(String[] _alertTexts) {
+		alertTexts = _alertTexts;
 	}
 
 	public void openOtherProfile(Activity activity, String memberId,
 			DeepLinkListener callback) {
 		this.deepLinkListener = callback;
-		Log.d(LCAT, ">>>>> openOtherProfile started with " + memberId);
-		Context ctx = activity.getApplicationContext();
+		Log.d(LCAT, " openOtherProfile meemberId=\"" + memberId + "\"");
+		Context ctx = activity.getBaseContext();
 		LISession session = LISessionManager.getInstance(ctx).getSession();
-		Log.d(LCAT, session.toString());
+		Log.d(LCAT, "session=" + session.toString());
+		Log.d(LCAT, "session.isValid=" + session.isValid());
+		AccessToken at = session.getAccessToken();
+		if (at != null) {
+			Log.d(LCAT, "at=" + session.getAccessToken().getValue());
+			Log.d(LCAT, "atexp=" + session.getAccessToken().getExpiresOn());
+		} else
+			Log.w(LCAT, "AccessToken is null");
 		if (!session.isValid()) {
 			Log.d(LCAT,
 					"openOtherProfile ends with 'no access token' for member "
