@@ -51,7 +51,7 @@ public class LISessionManager {
 	private static final String LI_APP_CATEGORY = "com.linkedin.android.auth.thirdparty.authorize";
 	private static final String LI_ERROR_INFO = "com.linkedin.thirdparty.authorize.RESULT_ACTION_ERROR_INFO";
 	private static final String LI_ERROR_DESCRIPTION = "com.linkedin.thirdparty.authorize.RESULT_ACTION_ERROR_DESCRIPTION";
-
+	final static String LCAT = "LinkedIn 👥";
 	private static LISessionManager sessionManager;
 
 	private Context ctx;
@@ -258,8 +258,10 @@ public class LISessionManager {
 
 		private void recover() {
 			SharedPreferences sharedPref = getSharedPref();
+			Log.d(LCAT, "SharedPreferences" + sharedPref.toString());
 			String accessTokenStr = sharedPref.getString(
 					SHARED_PREFERENCES_ACCESS_TOKEN, null);
+			Log.d(LCAT, "accessTokenStr=" + accessTokenStr);
 			accessToken = accessTokenStr == null ? null : AccessToken
 					.buildAccessToken(accessTokenStr);
 		}
